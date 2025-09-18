@@ -57,6 +57,26 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Restaurant theme colors
+        "orange-primary": "hsl(var(--orange-primary))",
+        "orange-light": "hsl(var(--orange-light))",
+        "red-accent": "hsl(var(--red-accent))",
+        "red-dark": "hsl(var(--red-dark))",
+        "warm-neutral": "hsl(var(--warm-neutral))",
+        cream: "hsl(var(--cream))",
+      },
+      backgroundImage: {
+        "gradient-primary": "var(--gradient-primary)",
+        "gradient-warm": "var(--gradient-warm)",
+        "gradient-food": "var(--gradient-food)",
+      },
+      boxShadow: {
+        warm: "var(--shadow-warm)",
+        card: "var(--shadow-card)",
+      },
+      transitionTimingFunction: {
+        smooth: "var(--transition-smooth)",
+        bounce: "var(--transition-bounce)",
       },
       borderRadius: {
         lg: "var(--radius)",
