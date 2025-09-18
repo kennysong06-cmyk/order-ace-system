@@ -5,7 +5,8 @@ import { CategoryFilter } from "@/components/CategoryFilter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, Star, MapPin } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Clock, Star, MapPin, LogOut, User } from "lucide-react";
 
 // Import food images
 import pizzaImage from "@/assets/pizza-margherita.jpg";
@@ -59,6 +60,7 @@ const menuItems: MenuItemType[] = [
 ];
 
 const Index = () => {
+  const { user, signOut } = useAuth();
   const [activeCategory, setActiveCategory] = useState("all");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const { toast } = useToast();
@@ -122,6 +124,22 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-warm">
+      {/* Auth Header */}
+      <div className="bg-card/60 backdrop-blur-sm border-b">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">{user?.email}</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={signOut} className="flex items-center space-x-2">
+              <LogOut className="h-4 w-4" />
+              <span>Sign Out</span>
+            </Button>
+          </div>
+        </div>
+      </div>
+      
       {/* Header */}
       <header className="bg-card/80 backdrop-blur-sm border-b sticky top-0 z-40 shadow-card">
         <div className="container mx-auto px-4 py-6">
