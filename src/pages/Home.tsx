@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
 import { Star, Clock, MapPin, ChefHat, Award, Heart, LogOut, User } from "lucide-react";
+import restaurantHero from "@/assets/restaurant-hero.jpg";
 
 const Home = () => {
   const { user, signOut } = useAuth();
@@ -28,8 +29,17 @@ const Home = () => {
       )}
 
       {/* Hero Section */}
-      <section className="relative py-20 px-4">
-        <div className="container mx-auto text-center">
+      <section className="relative py-20 px-4 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={restaurantHero} 
+            alt="Bella Vista Restaurant Interior" 
+            className="w-full h-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background/80"></div>
+        </div>
+        <div className="container mx-auto text-center relative z-10">
           <Badge className="bg-gradient-primary border-0 text-primary-foreground px-4 py-2 text-sm font-semibold shadow-warm mb-6">
             ⭐ Top Rated Restaurant
           </Badge>
