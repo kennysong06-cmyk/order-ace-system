@@ -1,9 +1,67 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
-import { Star, Clock, MapPin, ChefHat, Award, Heart, LogOut, User } from "lucide-react";
+import { Star, Clock, MapPin, ChefHat, Award, Heart, LogOut, User, Flame, TrendingUp, ShoppingCart } from "lucide-react";
 import restaurantHero from "@/assets/restaurant-hero.jpg";
+
+// Import food images
+import pizzaImage from "@/assets/pizza-margherita.jpg";
+import burgerImage from "@/assets/gourmet-burger.jpg";
+import saladImage from "@/assets/caesar-salad.jpg";
+import cakeImage from "@/assets/chocolate-lava-cake.jpg";
+
+const hotSaleItems = [
+  {
+    id: "1",
+    name: "Margherita Pizza",
+    description: "Fresh mozzarella, basil, and tomato sauce",
+    price: 16.99,
+    originalPrice: 19.99,
+    image: pizzaImage,
+    discount: "15% OFF"
+  },
+  {
+    id: "4",
+    name: "Chocolate Lava Cake",
+    description: "Warm chocolate cake with molten center",
+    price: 8.99,
+    originalPrice: 11.99,
+    image: cakeImage,
+    discount: "25% OFF"
+  }
+];
+
+const bestSellingItems = [
+  {
+    id: "2",
+    name: "Gourmet Burger",
+    description: "Angus beef patty with caramelized onions",
+    price: 18.99,
+    image: burgerImage,
+    rating: 4.9,
+    orders: "500+ orders"
+  },
+  {
+    id: "1",
+    name: "Margherita Pizza",
+    description: "Fresh mozzarella, basil, and tomato sauce",
+    price: 16.99,
+    image: pizzaImage,
+    rating: 4.8,
+    orders: "450+ orders"
+  },
+  {
+    id: "3",
+    name: "Caesar Salad",
+    description: "Crisp romaine lettuce with parmesan",
+    price: 12.99,
+    image: saladImage,
+    rating: 4.7,
+    orders: "300+ orders"
+  }
+];
 
 const Home = () => {
   const { user, signOut } = useAuth();
@@ -78,6 +136,111 @@ const Home = () => {
             <Button variant="outline" size="lg" className="px-8 py-4 text-lg font-semibold border-orange-primary/20 hover:bg-orange-primary/10">
               View Menu
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Hot Sale Section */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <Badge className="bg-red-500 text-white px-4 py-2 text-sm font-semibold mb-4">
+              <Flame className="h-4 w-4 mr-2" />
+              Hot Sale
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-warm-neutral mb-4">
+              Limited Time Offers
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Don't miss out on these amazing deals. Fresh flavors at unbeatable prices!
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {hotSaleItems.map((item, index) => (
+              <Card key={item.id} className="group overflow-hidden border-0 shadow-card hover:shadow-lg transition-all duration-300 hover-scale animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <CardContent className="p-0">
+                  <div className="relative">
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <Badge className="absolute top-4 left-4 bg-red-500 text-white border-0">
+                      {item.discount}
+                    </Badge>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-warm-neutral mb-2">{item.name}</h3>
+                    <p className="text-muted-foreground mb-4">{item.description}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl font-bold text-orange-primary">${item.price}</span>
+                        <span className="text-lg text-muted-foreground line-through">${item.originalPrice}</span>
+                      </div>
+                      <Button className="bg-gradient-primary border-0 shadow-warm">
+                        <ShoppingCart className="h-4 w-4 mr-2" />
+                        Add to Cart
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Best Selling Section */}
+      <section className="py-16 px-4 bg-card/30">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <Badge className="bg-gradient-primary border-0 text-primary-foreground px-4 py-2 text-sm font-semibold mb-4">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Best Sellers
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-bold text-warm-neutral mb-4">
+              Customer Favorites
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Our most loved dishes that keep customers coming back for more
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {bestSellingItems.map((item, index) => (
+              <Card key={item.id} className="group overflow-hidden border-0 shadow-card hover:shadow-lg transition-all duration-300 hover-scale animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <CardContent className="p-0">
+                  <div className="relative">
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <Badge className="absolute top-4 right-4 bg-orange-primary text-white border-0">
+                      #{index + 1} Bestseller
+                    </Badge>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-warm-neutral mb-2">{item.name}</h3>
+                    <p className="text-muted-foreground mb-3">{item.description}</p>
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                        <span className="font-semibold text-sm">{item.rating}</span>
+                      </div>
+                      <span className="text-sm text-muted-foreground">{item.orders}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-2xl font-bold text-orange-primary">${item.price}</span>
+                      <Button variant="outline" className="border-orange-primary/20 hover:bg-orange-primary/10">
+                        Order Now
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
