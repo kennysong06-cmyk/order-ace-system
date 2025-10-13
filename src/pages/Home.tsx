@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "react-router-dom";
-import { Star, Clock, MapPin, ChefHat, Award, Heart, LogOut, User, Flame, TrendingUp, ShoppingCart } from "lucide-react";
+import { Star, Clock, MapPin, ChefHat, Award, Heart, LogOut, User, Flame, TrendingUp, ShoppingCart, Crown } from "lucide-react";
 import restaurantHero from "@/assets/restaurant-hero.jpg";
 
 // Import food images
@@ -77,10 +77,18 @@ const Home = () => {
                 <User className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">{user?.email}</span>
               </div>
-              <Button variant="outline" size="sm" onClick={signOut} className="flex items-center space-x-2">
-                <LogOut className="h-4 w-4" />
-                <span>Sign Out</span>
-              </Button>
+              <div className="flex items-center gap-3">
+                <Link to="/vip">
+                  <Button variant="outline" size="sm" className="flex items-center space-x-2 border-orange-primary/20 hover:bg-orange-primary/10">
+                    <Crown className="h-4 w-4 text-orange-primary" />
+                    <span>VIP</span>
+                  </Button>
+                </Link>
+                <Button variant="outline" size="sm" onClick={signOut} className="flex items-center space-x-2">
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
