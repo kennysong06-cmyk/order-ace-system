@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Loading from "./pages/Loading";
 import NotFound from "./pages/NotFound";
 import VIP from "./pages/VIP";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const AppContent = () => {
       <Route path="/" element={user ? <Home /> : <Auth />} />
       <Route path="/menu" element={user ? <Index /> : <Auth />} />
       <Route path="/vip" element={user ? <VIP /> : <Auth />} />
+      <Route path="/profile" element={user ? <Profile /> : <Auth />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

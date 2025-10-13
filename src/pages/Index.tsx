@@ -6,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
-import { Clock, Star, MapPin, LogOut, User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
+import { Clock, Star, MapPin, LogOut, User as UserIcon } from "lucide-react";
 
 // Import food images
 import pizzaImage from "@/assets/pizza-margherita.jpg";
@@ -114,12 +116,63 @@ const Index = () => {
     }
   };
 
-  const handleCheckout = () => {
-    toast({
-      title: "Order placed!",
-      description: "Your delicious meal is being prepared. Thank you!",
-    });
-    setCartItems([]);
+  const handleCheckout = async () => {
+    if (!user || cartItems.length === 0) return;
+
+    try {
+      const totalAmount = cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      // Get user's address from profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("address")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      // Create order
+      const { data: orderData, error: orderError } = await supabase
+        .from("orders")
+        .insert({
+          user_id: user.id,
+          total_amount: totalAmount,
+          status: "pending",
+          delivery_address: profileData?.address || "Address not set",
+        })
+        .select()
+        .single();
+
+      if (orderError) throw orderError;
+
+      // Create order items
+      const orderItems = cartItems.map((item) => ({
+        order_id: orderData.id,
+        item_name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("order_items")
+        .insert(orderItems);
+
+      if (itemsError) throw itemsError;
+
+      toast({
+        title: "Order placed!",
+        description: "Your delicious meal is being prepared. Thank you!",
+      });
+      setCartItems([]);
+    } catch (error) {
+      console.error("Error placing order:", error);
+      toast({
+        title: "Error",
+        description: "Failed to place order. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -129,13 +182,21 @@ const Index = () => {
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <User className="h-4 w-4 text-muted-foreground" />
+              <UserIcon className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm text-muted-foreground">{user?.email}</span>
             </div>
-            <Button variant="outline" size="sm" onClick={signOut} className="flex items-center space-x-2">
-              <LogOut className="h-4 w-4" />
-              <span>Sign Out</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Link to="/profile">
+                <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                  <UserIcon className="h-4 w-4" />
+                  <span>Profile</span>
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" onClick={signOut} className="flex items-center space-x-2">
+                <LogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
