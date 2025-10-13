@@ -133,9 +133,11 @@ const Home = () => {
                 Order Now
               </Button>
             </Link>
-            <Button variant="outline" size="lg" className="px-8 py-4 text-lg font-semibold border-orange-primary/20 hover:bg-orange-primary/10">
-              View Menu
-            </Button>
+            <Link to="/vip">
+              <Button variant="outline" size="lg" className="px-8 py-4 text-lg font-semibold border-orange-primary/20 hover:bg-orange-primary/10">
+                VIP Membership
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
