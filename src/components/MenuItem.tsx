@@ -12,6 +12,7 @@ export interface MenuItemType {
   price: number;
   image: string;
   category: string;
+  subcategory?: string;
   popular?: boolean;
 }
 

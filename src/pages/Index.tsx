@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MenuItem, MenuItemType } from "@/components/MenuItem";
 import { Cart, CartItem } from "@/components/Cart";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { SubcategoryFilter } from "@/components/SubcategoryFilter";
 import { PaymentModal } from "@/components/PaymentModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +33,7 @@ const menuItems: MenuItemType[] = [
     price: 16.99,
     image: pizzaImage,
     category: "mains",
+    subcategory: "pizza",
     popular: true
   },
   {
@@ -41,6 +43,7 @@ const menuItems: MenuItemType[] = [
     price: 18.99,
     image: burgerImage,
     category: "mains",
+    subcategory: "burger",
     popular: true
   },
   {
@@ -49,7 +52,8 @@ const menuItems: MenuItemType[] = [
     description: "Crisp romaine lettuce with parmesan, croutons, and grilled chicken",
     price: 12.99,
     image: saladImage,
-    category: "appetizers"
+    category: "appetizers",
+    subcategory: "salad"
   },
   {
     id: "4",
@@ -58,6 +62,7 @@ const menuItems: MenuItemType[] = [
     price: 8.99,
     image: cakeImage,
     category: "desserts",
+    subcategory: "cake",
     popular: true
   }
 ];
@@ -66,13 +71,31 @@ const Index = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
+  const [activeSubcategory, setActiveSubcategory] = useState("all");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const { toast } = useToast();
 
-  const filteredItems = activeCategory === "all" 
-    ? menuItems 
-    : menuItems.filter(item => item.category === activeCategory);
+  // Get available subcategories based on active category
+  const availableSubcategories = activeCategory === "all"
+    ? []
+    : [...new Set(menuItems
+        .filter(item => item.category === activeCategory)
+        .map(item => item.subcategory)
+        .filter(Boolean)
+      )];
+
+  const filteredItems = menuItems.filter(item => {
+    const matchesCategory = activeCategory === "all" || item.category === activeCategory;
+    const matchesSubcategory = activeSubcategory === "all" || item.subcategory === activeSubcategory;
+    return matchesCategory && matchesSubcategory;
+  });
+
+  // Reset subcategory when category changes
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    setActiveSubcategory("all");
+  };
 
   const handleAddToCart = (item: MenuItemType, quantity: number) => {
     setCartItems(prev => {
@@ -243,7 +266,13 @@ const Index = () => {
       <main className="container mx-auto px-4 py-8">
         <CategoryFilter 
           activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
+          onCategoryChange={handleCategoryChange}
+        />
+
+        <SubcategoryFilter
+          subcategories={availableSubcategories}
+          activeSubcategory={activeSubcategory}
+          onSubcategoryChange={setActiveSubcategory}
         />
 
         {filteredItems.length === 0 ? (
