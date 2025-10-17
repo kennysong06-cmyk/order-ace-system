@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MenuItem, MenuItemType } from "@/components/MenuItem";
 import { Cart, CartItem } from "@/components/Cart";
 import { CategoryFilter } from "@/components/CategoryFilter";
+import { PaymentModal } from "@/components/PaymentModal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
@@ -65,6 +66,7 @@ const Index = () => {
   const { user, signOut } = useAuth();
   const [activeCategory, setActiveCategory] = useState("all");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const { toast } = useToast();
 
   const filteredItems = activeCategory === "all" 
@@ -116,7 +118,12 @@ const Index = () => {
     }
   };
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
+    if (!user || cartItems.length === 0) return;
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentConfirmed = async (paymentMethod: string) => {
     if (!user || cartItems.length === 0) return;
 
     try {
@@ -124,6 +131,8 @@ const Index = () => {
         (sum, item) => sum + item.price * item.quantity,
         0
       );
+      const tax = totalAmount * 0.08;
+      const finalTotal = totalAmount + tax;
 
       // Get user's address from profile
       const { data: profileData } = await supabase
@@ -137,7 +146,7 @@ const Index = () => {
         .from("orders")
         .insert({
           user_id: user.id,
-          total_amount: totalAmount,
+          total_amount: finalTotal,
           status: "pending",
           delivery_address: profileData?.address || "Address not set",
         })
@@ -162,7 +171,7 @@ const Index = () => {
 
       toast({
         title: "Order placed!",
-        description: "Your delicious meal is being prepared. Thank you!",
+        description: `Payment via ${paymentMethod} successful. Your meal is being prepared!`,
       });
       setCartItems([]);
     } catch (error) {
@@ -261,6 +270,14 @@ const Index = () => {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={handleCheckout}
+      />
+
+      {/* Payment Modal */}
+      <PaymentModal
+        open={showPaymentModal}
+        onOpenChange={setShowPaymentModal}
+        totalAmount={cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) * 1.08}
+        onConfirmPayment={handlePaymentConfirmed}
       />
     </div>
   );
