@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,31 +35,35 @@ export const MenuItem = ({ item, onAddToCart }: MenuItemProps) => {
 
   return (
     <Card className="group hover:shadow-warm transition-all duration-300 hover:-translate-y-1 bg-gradient-food border-0 overflow-hidden">
-      <div className="relative">
-        <img 
-          src={item.image} 
-          alt={item.name}
-          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-        {item.popular && (
-          <Badge className="absolute top-3 left-3 bg-gradient-primary border-0 text-primary-foreground shadow-warm">
-            Popular
-          </Badge>
-        )}
-      </div>
+      <Link to={`/product/${item.id}`}>
+        <div className="relative cursor-pointer">
+          <img 
+            src={item.image} 
+            alt={item.name}
+            className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+          {item.popular && (
+            <Badge className="absolute top-3 left-3 bg-gradient-primary border-0 text-primary-foreground shadow-warm">
+              Popular
+            </Badge>
+          )}
+        </div>
+      </Link>
       
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
-          <CardTitle className="text-xl font-bold text-warm-neutral group-hover:text-orange-primary transition-colors">
-            {item.name}
-          </CardTitle>
-          <span className="text-xl font-bold text-orange-primary">
-            ${item.price.toFixed(2)}
-          </span>
-        </div>
-        <CardDescription className="text-muted-foreground leading-relaxed">
-          {item.description}
-        </CardDescription>
+        <Link to={`/product/${item.id}`} className="block">
+          <div className="flex justify-between items-start">
+            <CardTitle className="text-xl font-bold text-warm-neutral group-hover:text-orange-primary transition-colors">
+              {item.name}
+            </CardTitle>
+            <span className="text-xl font-bold text-orange-primary">
+              ${item.price.toFixed(2)}
+            </span>
+          </div>
+          <CardDescription className="text-muted-foreground leading-relaxed">
+            {item.description}
+          </CardDescription>
+        </Link>
       </CardHeader>
 
       <CardContent className="pt-0">
