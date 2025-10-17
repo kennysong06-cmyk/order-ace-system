@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Clock, Star, MapPin, LogOut, User as UserIcon } from "lucide-react";
 
 // Import food images
@@ -64,6 +64,7 @@ const menuItems: MenuItemType[] = [
 
 const Index = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
@@ -169,11 +170,9 @@ const Index = () => {
 
       if (itemsError) throw itemsError;
 
-      toast({
-        title: "Order placed!",
-        description: `Payment via ${paymentMethod} successful. Your meal is being prepared!`,
-      });
+      // Clear cart and redirect to success page
       setCartItems([]);
+      navigate("/order-success", { state: { orderId: orderData.id } });
     } catch (error) {
       console.error("Error placing order:", error);
       toast({

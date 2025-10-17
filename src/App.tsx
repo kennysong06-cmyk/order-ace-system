@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import VIP from "./pages/VIP";
 import Profile from "./pages/Profile";
 import ProductDetail from "./pages/ProductDetail";
+import OrderSuccess from "./pages/OrderSuccess";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const AppContent = () => {
       <Route path="/" element={user ? <Home /> : <Auth />} />
       <Route path="/menu" element={user ? <Index /> : <Auth />} />
       <Route path="/product/:id" element={user ? <ProductDetail /> : <Auth />} />
+      <Route path="/order-success" element={user ? <OrderSuccess /> : <Auth />} />
       <Route path="/vip" element={user ? <VIP /> : <Auth />} />
       <Route path="/profile" element={user ? <Profile /> : <Auth />} />
       <Route path="*" element={<NotFound />} />
