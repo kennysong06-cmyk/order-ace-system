@@ -235,7 +235,7 @@ const Index = () => {
       {/* Header */}
       <header className="bg-card/80 backdrop-blur-sm border-b sticky top-0 z-40 shadow-card">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold text-warm-neutral mb-2">
                 {restaurantInfo.name}
