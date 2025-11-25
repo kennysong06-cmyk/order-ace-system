@@ -112,8 +112,8 @@ const Home = () => {
           <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background/80"></div>
         </div>
         <div className="container mx-auto text-center relative z-10">
-          <Badge className="bg-gradient-primary border-0 text-primary-foreground px-4 py-2 text-sm font-semibold shadow-warm mb-6">
-            ⭐ Top Rated Restaurant
+          <Badge className="relative overflow-hidden border-0 text-primary-foreground px-4 py-2 text-sm font-semibold shadow-warm mb-6 bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 bg-[length:200%_100%] animate-[gradient_3s_ease_infinite]">
+            <span className="relative z-10">⭐ Top Rated Restaurant</span>
           </Badge>
           
           <h1 className="text-5xl md:text-7xl font-bold text-warm-neutral mb-6 leading-tight">
